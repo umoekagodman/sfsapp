@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdk 34
 	defaultConfig {
-		applicationId 'sngine.app.webview'
+		applicationId 'sfs.app.webview'
         minSdk 21
         targetSdk 34
 		versionCode 11
@@ -19,7 +19,7 @@ android {
 	}
 	productFlavors {
 	}
-	namespace 'sngine.app.webview'
+	namespace 'sfs.app.webview'
 }
 
 dependencies {
