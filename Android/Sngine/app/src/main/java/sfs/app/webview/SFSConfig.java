@@ -1,4 +1,4 @@
-package sngine.app.webview;
+package sfs.app.webview;
 
 class SngineConfig {
 

@@ -1,4 +1,4 @@
-package sngine.app.webview;
+package sfs.app.webview;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -16,14 +16,14 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import static sngine.app.webview.IntentHelper.createIntentForAmazonAppstore;
-import static sngine.app.webview.IntentHelper.createIntentForGooglePlay;
-import static sngine.app.webview.PreferenceHelper.setAgreeShowDialog;
-import static sngine.app.webview.PreferenceHelper.setRemindInterval;
-import static sngine.app.webview.UriHelper.getAmazonAppstore;
-import static sngine.app.webview.UriHelper.getGooglePlay;
-import static sngine.app.webview.UriHelper.isPackageExists;
-import static sngine.app.webview.Utils.getDialogBuilder;
+import static sfs.app.webview.IntentHelper.createIntentForAmazonAppstore;
+import static sfs.app.webview.IntentHelper.createIntentForGooglePlay;
+import static sfs.app.webview.PreferenceHelper.setAgreeShowDialog;
+import static sfs.app.webview.PreferenceHelper.setRemindInterval;
+import static sfs.app.webview.UriHelper.getAmazonAppstore;
+import static sfs.app.webview.UriHelper.getGooglePlay;
+import static sfs.app.webview.UriHelper.isPackageExists;
+import static sfs.app.webview.Utils.getDialogBuilder;
 
 final class DialogManager {
 

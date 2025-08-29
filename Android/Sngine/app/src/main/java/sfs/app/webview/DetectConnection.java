@@ -1,4 +1,4 @@
-package sngine.app.webview;
+package sfs.app.webview;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
