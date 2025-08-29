@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APK - DIAGNOSTIC
 
 on:
   push:
@@ -6,37 +6,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  diagnose:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-      working-directory: ./Android  # <-- CRITICAL FIX: Tells it to run this command inside the Android subfolder
-
-    - name: List project files
-      run: ls -la
-      working-directory: ./Android  # <-- So we can see the contents of the RIGHT folder
-
-    - name: Build APK with Gradle
-      run: ./gradlew assembleDebug --info
-      working-directory: ./Android  # <-- CRITICAL FIX: Builds from the correct directory
-
-    - name: Find the APK
-      run: find . -name "*.apk" -type f
-      working-directory: ./Android  # <-- Searches for the APK in the right place
-
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-debug-apk
-        path: Android/app/build/outputs/apk/debug/app-debug.apk # <-- Path is now relative to the repository root
+    # This command will show us the EXACT folder structure
+    - name: Debug - Show Full Directory Tree
+      run: |
+        echo "FULL DIRECTORY STRUCTURE:"
+        find . -type d -name "Android" | head -10
+        echo "---"
+        echo "LIST OF ALL FILES AND FOLDERS IN ROOT:"
+        ls -la
+        echo "---"
+        echo "IF AN 'Android' FOLDER EXISTS, ITS CONTENTS:"
+        if [ -d "Android" ]; then
+          ls -la Android/
+        else
+          echo "No 'Android' folder found in the root directory."
+        fi
