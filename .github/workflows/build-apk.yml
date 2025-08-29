@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4 # Changed from v3 to v4
+      uses: actions/checkout@v4
 
     - name: Set up JDK 17
       uses: actions/setup-java@v3
@@ -19,11 +19,24 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+      working-directory: ./Android  # <-- CRITICAL FIX: Tells it to run this command inside the Android subfolder
+
+    - name: List project files
+      run: ls -la
+      working-directory: ./Android  # <-- So we can see the contents of the RIGHT folder
+
     - name: Build APK with Gradle
-      run: ./Sngine/gradlew assembleDebug
+      run: ./gradlew assembleDebug --info
+      working-directory: ./Android  # <-- CRITICAL FIX: Builds from the correct directory
+
+    - name: Find the APK
+      run: find . -name "*.apk" -type f
+      working-directory: ./Android  # <-- Searches for the APK in the right place
 
     - name: Upload APK artifact
-      uses: actions/upload-artifact@v4 # THIS IS THE CRITICAL FIX: Changed from v3 to v4
+      uses: actions/upload-artifact@v4
       with:
         name: app-debug-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: Android/app/build/outputs/apk/debug/app-debug.apk # <-- Path is now relative to the repository root
