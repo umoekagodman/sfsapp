@@ -20,7 +20,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Build APK with Gradle
-      run: ./gradlew assembleDebug
+      run: ./Sngine/gradlew assembleDebug
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4 # THIS IS THE CRITICAL FIX: Changed from v3 to v4
