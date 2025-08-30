@@ -9,88 +9,98 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#80000000">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Welcome to"
-                android:textColor="#FFFFFF"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginTop="40dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="StrangersForSex.com"
-                android:textColor="#FFFFFF"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Worldwide Escort Directory"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:layout_marginTop="20dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Clients only contact escorts when they are serious about their intentions. No time-wasters allowed!"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:layout_marginTop="30dp"
-                android:gravity="center"
-                android:paddingHorizontal="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Are you an adult?"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="40dp" />
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="40dp">
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_vertical">
 
-                <Button
-                    android:id="@+id/btnYes"
-                    android:layout_width="120dp"
-                    android:layout_height="50dp"
-                    android:text="Yes"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome to"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#4CAF50"
-                    android:layout_marginEnd="20dp" />
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp" />
 
-                <Button
-                    android:id="@+id/btnNo"
-                    android:layout_width="120dp"
-                    android:layout_height="50dp"
-                    android:text="No"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="StrangersForSex.com"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#F44336" />
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Worldwide Escort Directory"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:layout_marginTop="20dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Clients only contact escorts when they are serious about their intentions. No time-wasters allowed!"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
+                    android:lineSpacingMultiplier="1.2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Are you an adult?"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="40dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="40dp">
+
+                    <Button
+                        android:id="@+id/btnYes"
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:text="Yes"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#4CAF50"
+                        android:layout_marginEnd="20dp" />
+
+                    <Button
+                        android:id="@+id/btnNo"
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:text="No"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#F44336" />
+
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </RelativeLayout>
 </RelativeLayout>
