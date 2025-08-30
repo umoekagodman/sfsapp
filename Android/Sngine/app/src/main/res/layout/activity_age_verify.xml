@@ -2,33 +2,36 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
- 
-    <!-- WebView for video playback -->
+    android:fitsSystemWindows="false">
+
+    <!-- WebView for video playback - MUST use match_parent -->
     <WebView
         android:id="@+id/videoWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Overlay content - REMOVED ALL PADDING for 100% height -->
+    <!-- Overlay content - MUST use match_parent and zero padding -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#80000000"
-        android:padding="0dp">
+        android:padding="0dp"
+        android:fitsSystemWindows="false">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="16dp">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:fitsSystemWindows="false"
+            android:padding="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="20dp">
+                android:gravity="center_vertical|center_horizontal"
+                android:padding="20dp"
+                android:fitsSystemWindows="false">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,7 +85,6 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="32dp">
 
-                    <!-- YES Button with white border -->
                     <Button
                         android:id="@+id/btnYes"
                         android:layout_width="120dp"
@@ -93,7 +95,6 @@
                         android:background="@drawable/button_border_white"
                         android:layout_marginEnd="20dp" />
 
-                    <!-- NO Button with white border -->
                     <Button
                         android:id="@+id/btnNo"
                         android:layout_width="120dp"
