@@ -17,13 +17,21 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Make activity full screen (like TikTok)
+        getWindow().getDecorView().setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+            View.SYSTEM_UI_FLAG_FULLSCREEN
+        );
+        
         setContentView(R.layout.activity_age_verify);
 
         videoWebView = findViewById(R.id.videoWebView);
         Button btnYes = findViewById(R.id.btnYes);
         Button btnNo = findViewById(R.id.btnNo);
 
-        // Set up WebView for video playback
+        // Set up WebView for video playback WITH SOUND
         setupVideoWebView();
 
         // Handle button clicks
@@ -41,21 +49,22 @@ public class SplashScreen extends AppCompatActivity {
             // Configure WebView
             videoWebView.getSettings().setJavaScriptEnabled(true);
             videoWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+            videoWebView.getSettings().setDomStorageEnabled(true);
             videoWebView.setWebChromeClient(new WebChromeClient());
             videoWebView.setWebViewClient(new WebViewClient());
             
-            // Load HTML with video that uses CSS object-fit: cover
+            // Load HTML with video that uses CSS object-fit: cover - REMOVED muted attribute
             String htmlContent = "<!DOCTYPE html>" +
                 "<html>" +
                 "<head>" +
                 "<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'>" +
                 "<style>" +
-                "body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }" +
+                "body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }" +
                 "video { width: 100%; height: 100%; object-fit: cover; }" +
                 "</style>" +
                 "</head>" +
                 "<body>" +
-                "<video autoplay loop muted playsinline>" +
+                "<video autoplay loop playsinline>" + // REMOVED 'muted' attribute for sound
                 "<source src='file:///android_res/raw/tom_and_jerry.mp4' type='video/mp4'>" +
                 "</video>" +
                 "</body>" +
@@ -69,7 +78,7 @@ public class SplashScreen extends AppCompatActivity {
                 null
             );
 
-            Log.d(TAG, "WebView video setup successfully");
+            Log.d(TAG, "WebView video setup successfully with sound");
 
         } catch (Exception e) {
             Log.e(TAG, "Exception setting up WebView video: " + e.getMessage());
@@ -82,8 +91,8 @@ public class SplashScreen extends AppCompatActivity {
         super.onPause();
         if (videoWebView != null) {
             videoWebView.onPause();
-            // Pause video by reloading the page without autoplay
-            videoWebView.loadData("", "text/html", "UTF-8");
+            // Pause video by executing JavaScript
+            videoWebView.loadUrl("javascript:document.querySelector('video').pause();");
         }
     }
 
@@ -92,7 +101,8 @@ public class SplashScreen extends AppCompatActivity {
         super.onResume();
         if (videoWebView != null) {
             videoWebView.onResume();
-            setupVideoWebView(); // Restart the video
+            // Resume video by executing JavaScript
+            videoWebView.loadUrl("javascript:document.querySelector('video').play();");
         }
     }
 
