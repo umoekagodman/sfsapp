@@ -5,10 +5,10 @@
 
     <!-- VideoView that fills the entire screen -->
     <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY" />
+        <sfs.app.webview.AspectRatioVideoView
+    android:id="@+id/videoView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 
     <!-- Semi-transparent overlay with centered content -->
     <RelativeLayout
