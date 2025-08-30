@@ -2,35 +2,39 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdk 34
-	defaultConfig {
-		applicationId 'sfs.app.webview'
+    defaultConfig {
+        applicationId 'sfs.app.webview'
         minSdk 21
         targetSdk 34
-		versionCode 11
-		versionName '11'
-		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-		multiDexEnabled true
-	}
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-		}
-	}
-	productFlavors {
-	}
-	namespace 'sfs.app.webview'
+        versionCode 11
+        versionName '11'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+    }
+    namespace 'sfs.app.webview'
 }
 
 dependencies {
-	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-	implementation 'androidx.appcompat:appcompat:1.7.0'
-	testImplementation 'junit:junit:4.13.2'
-	implementation 'com.google.android.gms:play-services-auth:21.3.0'
-	implementation 'com.google.android.gms:play-services-location:21.3.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'com.google.android.gms:play-services-auth:21.3.0'
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
 
-	// OneSignal SDK
-	implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
+    // OneSignal SDK
+    implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
+    
+    // ExoPlayer dependencies - MUST be inside the dependencies block!
+    implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.19.1'
 }
