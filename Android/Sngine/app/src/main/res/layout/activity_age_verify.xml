@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Custom VideoView that fills and covers the entire screen -->
-    <sfs.app.webview.AspectRatioVideoView
-        android:id="@+id/videoView"
+    <!-- TextureView for video with cover behavior -->
+    <TextureView
+        android:id="@+id/textureView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 
     <!-- Semi-transparent overlay with centered content -->
     <RelativeLayout
@@ -103,4 +104,4 @@
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
-</RelativeLayout>
+</FrameLayout>
