@@ -1,4 +1,4 @@
-package com.yourpackage.name; // Replace with your actual package name
+package sfs.app.webview; // Your package name
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,36 +15,57 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_age_verify);
+        
+        // Set the age verification layout
+        setContentView(getResources().getIdentifier("activity_age_verify", "layout", getPackageName()));
 
-        videoView = findViewById(R.id.videoView);
-        Button btnYes = findViewById(R.id.btnYes);
-        Button btnNo = findViewById(R.id.btnNo);
+        // Find views using resource identifiers
+        videoView = findViewById(getResources().getIdentifier("videoView", "id", getPackageName()));
+        Button btnYes = findViewById(getResources().getIdentifier("btnYes", "id", getPackageName()));
+        Button btnNo = findViewById(getResources().getIdentifier("btnNo", "id", getPackageName()));
 
-        // Set up video background (make sure to add tom_and_jerry.mp4 to res/raw folder)
+        // Set up video background
         try {
-            Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tom_and_jerry);
-            videoView.setVideoURI(videoUri);
-            videoView.setOnPreparedListener(mp -> {
-                mp.setLooping(true);
-                videoView.start();
-            });
+            int videoResourceId = getResources().getIdentifier("tom_and_jerry", "raw", getPackageName());
+            if (videoResourceId != 0) {
+                Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + videoResourceId);
+                videoView.setVideoURI(videoUri);
+                videoView.setOnPreparedListener(mp -> {
+                    mp.setLooping(true);
+                    videoView.start();
+                });
+            }
         } catch (Exception e) {
-            // If video fails to load, continue without it
             e.printStackTrace();
         }
 
         // Handle Yes button click - proceed to main app
-        btnYes.setOnClickListener(v -> {
-            Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SplashScreen.this, getMainActivityClass());
+                startActivity(intent);
+                finish();
+            }
         });
 
         // Handle No button click - close the app
-        btnNo.setOnClickListener(v -> {
-            finishAffinity();
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAffinity();
+            }
         });
+    }
+
+    // Helper method to get the main activity class
+    private Class<?> getMainActivityClass() {
+        try {
+            return Class.forName("sfs.app.webview.MainActivity");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
