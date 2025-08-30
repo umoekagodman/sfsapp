@@ -55,7 +55,7 @@
     android:name=".SplashScreen"
     android:exported="true"
     android:screenOrientation="portrait"
-    android:theme="@style/FullScreenTheme" <!-- CHANGED THIS LINE -->
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"
     tools:ignore="DiscouragedApi">
     <intent-filter>
         <action android:name="android.intent.action.MAIN" />
