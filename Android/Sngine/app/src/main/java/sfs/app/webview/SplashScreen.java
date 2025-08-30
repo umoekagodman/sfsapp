@@ -1,36 +1,65 @@
-package sfs.app.webview;
+package com.yourpackage.name; // Replace with your actual package name
 
-import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.VideoView;
 
-public class SplashScreen extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
 
-	@Override
+public class SplashScreen extends AppCompatActivity {
+    private VideoView videoView;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_age_verify);
 
-		int SPLASH_TIME_OUT = 1000;
-		new Handler().postDelayed(new Runnable() {
+        videoView = findViewById(R.id.videoView);
+        Button btnYes = findViewById(R.id.btnYes);
+        Button btnNo = findViewById(R.id.btnNo);
 
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
+        // Set up video background (make sure to add tom_and_jerry.mp4 to res/raw folder)
+        try {
+            Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tom_and_jerry);
+            videoView.setVideoURI(videoUri);
+            videoView.setOnPreparedListener(mp -> {
+                mp.setLooping(true);
+                videoView.start();
+            });
+        } catch (Exception e) {
+            // If video fails to load, continue without it
+            e.printStackTrace();
+        }
 
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                startActivity(i);
+        // Handle Yes button click - proceed to main app
+        btnYes.setOnClickListener(v -> {
+            Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
-                // close this activity
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
+        // Handle No button click - close the app
+        btnNo.setOnClickListener(v -> {
+            finishAffinity();
+        });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (videoView != null && videoView.isPlaying()) {
+            videoView.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (videoView != null) {
+            videoView.start();
+        }
+    }
 }
