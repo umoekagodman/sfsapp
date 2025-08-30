@@ -34,7 +34,7 @@ dependencies {
     // OneSignal SDK
     implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
     
-    // ExoPlayer dependencies - MUST be inside the dependencies block!
-    implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.19.1'
+    // Use a compatible version of ExoPlayer that won't conflict with Play Services
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.7'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.7'
 }
