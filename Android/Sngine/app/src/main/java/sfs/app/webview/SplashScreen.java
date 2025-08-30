@@ -1,17 +1,22 @@
 package sfs.app.webview;
 
 import android.content.Intent;
+import android.graphics.Matrix;
+import android.graphics.SurfaceTexture;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.VideoView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SplashScreen extends AppCompatActivity {
-    private VideoView videoView;
+public class SplashScreen extends AppCompatActivity implements TextureView.SurfaceTextureListener {
+    private TextureView textureView;
+    private MediaPlayer mediaPlayer;
     private static final String TAG = "SplashScreen";
 
     @Override
@@ -19,69 +24,57 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_age_verify);
 
-        videoView = findViewById(R.id.videoView);
+        textureView = findViewById(R.id.textureView);
         Button btnYes = findViewById(R.id.btnYes);
         Button btnNo = findViewById(R.id.btnNo);
 
-        // Set up video background with detailed error handling
-        setupVideo();
+        // Set up TextureView listener
+        textureView.setSurfaceTextureListener(this);
 
-        // Handle Yes button click - proceed to main app
-        btnYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        // Handle button clicks
+        btnYes.setOnClickListener(v -> {
+            releaseMediaPlayer();
+            Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
 
-        // Handle No button click - close the app
-        btnNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishAffinity();
-            }
-        });
+        btnNo.setOnClickListener(v -> finishAffinity());
     }
 
-    private void setupVideo() {
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
+        setupVideo(new Surface(surfaceTexture));
+    }
+
+    private void setupVideo(Surface surface) {
         try {
-            Log.d(TAG, "Attempting to load video...");
-            
-            // Method 1: Try using resource ID directly
-            String packageName = getPackageName();
-            int rawId = getResources().getIdentifier("tom_and_jerry", "raw", packageName);
-            
-            Log.d(TAG, "Package name: " + packageName);
-            Log.d(TAG, "Raw resource ID: " + rawId);
+            int rawId = getResources().getIdentifier("tom_and_jerry", "raw", getPackageName());
             
             if (rawId != 0) {
-                Uri videoUri = Uri.parse("android.resource://" + packageName + "/" + rawId);
-                Log.d(TAG, "Video URI: " + videoUri.toString());
+                mediaPlayer = new MediaPlayer();
+                Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + rawId);
                 
-                videoView.setVideoURI(videoUri);
+                mediaPlayer.setDataSource(this, videoUri);
+                mediaPlayer.setSurface(surface);
+                mediaPlayer.setLooping(true);
                 
-                videoView.setOnPreparedListener(mp -> {
+                mediaPlayer.setOnPreparedListener(mp -> {
                     Log.d(TAG, "Video prepared successfully");
-                    mp.setLooping(true);
-                    videoView.start();
-                    Log.d(TAG, "Video playback started");
+                    
+                    // Apply center crop transformation (CSS cover equivalent)
+                    applyCenterCropTransform(mp.getVideoWidth(), mp.getVideoHeight());
+                    
+                    mp.start();
                 });
                 
-                videoView.setOnErrorListener((mp, what, extra) -> {
+                mediaPlayer.setOnErrorListener((mp, what, extra) -> {
                     Log.e(TAG, "Video playback error - what: " + what + ", extra: " + extra);
-                    Toast.makeText(SplashScreen.this, "Video format not supported", Toast.LENGTH_SHORT).show();
-                    return true; // We handled the error
+                    Toast.makeText(SplashScreen.this, "Video playback error", Toast.LENGTH_SHORT).show();
+                    return true;
                 });
                 
-                videoView.setOnCompletionListener(mp -> {
-                    Log.d(TAG, "Video completed, restarting...");
-                    videoView.start(); // Restart video when it completes
-                });
-            } else {
-                Log.e(TAG, "Raw resource not found");
-                Toast.makeText(this, "Video file not found", Toast.LENGTH_SHORT).show();
+                mediaPlayer.prepareAsync();
             }
         } catch (Exception e) {
             Log.e(TAG, "Exception setting up video: " + e.getMessage());
@@ -89,33 +82,82 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
 
+    private void applyCenterCropTransform(int videoWidth, int videoHeight) {
+        if (videoWidth == 0 || videoHeight == 0) return;
+        
+        float viewWidth = textureView.getWidth();
+        float viewHeight = textureView.getHeight();
+        
+        float scaleX = 1.0f;
+        float scaleY = 1.0f;
+        
+        if (videoWidth * viewHeight > viewWidth * videoHeight) {
+            // Video is wider than view - scale based on height
+            scaleX = viewHeight / videoHeight;
+            scaleY = scaleX;
+        } else {
+            // Video is taller than view - scale based on width
+            scaleX = viewWidth / videoWidth;
+            scaleY = scaleX;
+        }
+        
+        // Calculate translation to center the scaled video
+        float scaledWidth = videoWidth * scaleX;
+        float scaledHeight = videoHeight * scaleY;
+        float translateX = (viewWidth - scaledWidth) / 2;
+        float translateY = (viewHeight - scaledHeight) / 2;
+        
+        // Apply transformation matrix
+        Matrix matrix = new Matrix();
+        matrix.setScale(scaleX, scaleY);
+        matrix.postTranslate(translateX, translateY);
+        
+        textureView.setTransform(matrix);
+    }
+
+    // Other TextureView listener methods
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            applyCenterCropTransform(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
+        }
+    }
+    
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        return true;
+    }
+    
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
+
+    private void releaseMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause called");
-        if (videoView != null && videoView.isPlaying()) {
-            videoView.pause();
-            Log.d(TAG, "Video paused");
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume called");
-        if (videoView != null && !videoView.isPlaying()) {
-            videoView.start();
-            Log.d(TAG, "Video resumed");
+        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy called");
-        if (videoView != null) {
-            videoView.stopPlayback();
-            Log.d(TAG, "Video playback stopped");
-        }
+        releaseMediaPlayer();
     }
 }
